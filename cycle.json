@@ -1,5 +1,67 @@
 {
   "version": "1.0",
+  "services": {
+    "loadbalancer": {
+      "haproxy": {
+        "default": {
+          "frontend": {
+            "mode": "http",
+            "max_connections": 1000,
+            "timeouts": {
+              "client_secs": 15,
+              "client_fin_ms": 100,
+              "http_keep_alive_ms": 100,
+              "http_request_ms": 100
+            }
+          },
+          "backend": {
+            "balance": "roundrobin",
+            "timeouts": {
+              "server_secs": 15,
+              "server_fin_ms": 100,
+              "connect_ms": 100,
+              "queue_ms": 100,
+              "tunnel_secs": 25
+            }
+          }
+        },
+        "ports": {
+          "3000": {
+            "frontend": {
+              "mode": "http",
+              "max_connections": 1000,
+              "timeouts": {
+                "client_secs": 15,
+                "client_fin_ms": 100,
+                "http_keep_alive_ms": 100,
+                "http_request_ms": 100
+              }
+            },
+            "backend": {
+              "balance": "first",
+              "timeouts": {
+                "server_secs": 15,
+                "server_fin_ms": 100,
+                "connect_ms": 100,
+                "queue_ms": 100,
+                "tunnel_secs": 25
+              }
+            }
+          }
+        }
+      },
+      "ipv4": true,
+      "ipv6": true
+    },
+    "vpn": {
+      "auth": {
+        "web_hook": "/url/to/endpoint",
+        "cycle_accounts": true,
+        "vpn_accounts": false
+      },
+      "allow_internet": true
+    }
+  },
   "containers": {
     "demo": {
       "name": "demo",
@@ -8,32 +70,6 @@
         "origin": {
           "type": "docker-file",
           "details": {
-            "context_dir": "/",
-            "build_file": "/Dockerfile"
-          }
-        }
-      },
-      "config": {
-        "network": {
-          "public": "enable",
-          "hostname": "simplews",
-          "ports": ["80:80"]
-        },
-        "deploy": {
-          "instances": 1
-        }
-      }
-    },
-    "reach": {
-      "name": "reach",
-      "image": {
-        "name": "simplews-external",
-        "origin": {
-          "type": "docker-file",
-          "details": {
-            "repo": {
-              "url": "https://github.com/aubuchcl/build-dir-two.git"
-            },
             "context_dir": "/",
             "build_file": "/Dockerfile"
           }
