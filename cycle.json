@@ -55,7 +55,7 @@
     },
     "vpn": {
       "auth": {
-        "web_hook": "/url/to/endpoint",
+        "web_hook": "https://dev.chrisaubuchon.com/echo",
         "cycle_accounts": true,
         "vpn_accounts": false
       },
